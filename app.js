@@ -5,19 +5,35 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const hbs  = require('hbs');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const Page = require('./routes/page');
+const Api = require('./routes/api');
 
-var pageRouter = require('./routes/page');
-var apiRouter = require('./routes/api');
-
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
 hbs.registerHelper('raw', function(options){
 	return options.fn(this);
 });
+
+// MongoDB database setup
+const client = new MongoClient('mongodb://localhost:27017');
+let db = {};
+client.connect(function(err) {
+	assert.equal(null, err);
+	console.log("Connected successfully to server");
+	
+	db = client.db('close-to-home');
+	
+	client.close();
+});
+
+const router = express.Router();
+const pageRouter = new Page(router,db);
+const apiRouter = new Api(router,db);
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -5,7 +5,36 @@
     <link rel='stylesheet' href='/css/app.css' />
   </head>
   <body>
+
     {{{body}}}
+
+    <!-- Vue Templates -->
+    <script type="text/vue-template" id="template-upload">
+	    <div class="container">
+		    <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+			    <h1>Upload images</h1>
+			    <div class="dropbox">
+				    <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount=$event.target.files.length"
+				           accept="text/csv" class="input-file">
+				    <p v-if="isInitial">
+					    Drag your file(s) here to begin<br> or click to browse
+				    </p>
+				    <p v-if="isSaving">
+					    Uploading {{ fileCount }} files...
+				    </p>
+			    </div>
+		    </form>
+	    </div>
+	</script>
+
+    <script type="text/vue-template" id="template-list">
+	    <div class="container">
+
+	    </div>
+    </script>
+    <!--END: Vue Templates -->
+
+    <script type="text/javascript" src="/js/axios.min.js"></script>
     <script type="text/javascript" src="/js/vue.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
   </body>

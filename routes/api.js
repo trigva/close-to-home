@@ -1,24 +1,23 @@
-const express = require('express');
-const router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const _ = require('lodash');
-
-const client = new MongoClient('mongodb://localhost:27017');
-
-// Use connect method to connect to the Server
-client.connect(function(err) {
-	assert.equal(null, err);
-	console.log("Connected successfully to server");
-	
-	const db = client.db(dbName);
-	
-	client.close();
-});
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-module.exports = router;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var User_1 = require("./components/User");
+/**
+ * API module for all api endpoints
+ * @param router express.Router
+ * @param db MongoDb.client.db
+ * @returns router express.Router
+ */
+function Api(router, db) {
+    /* GET users listing. */
+    router.get('/users', function (req, res) {
+        var userC = new User_1.UserController(req, db);
+        res.jsonp([]);
+    });
+    /* POST upload users */
+    router.post('/users', function (req, res) {
+        res.jsonp({ success: true, message: "Uploaded Successfully" });
+    });
+    return router;
+}
+module.exports = Api;
+//# sourceMappingURL=api.js.map
