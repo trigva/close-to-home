@@ -8,7 +8,7 @@
 				uploadedFiles: [],
 				uploadError: null,
 				currentStatus: null,
-				uploadFieldName: 'photos',
+				uploadFieldName: 'csv',
 				fileCount: 0
 			}
 		},

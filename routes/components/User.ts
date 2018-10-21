@@ -1,8 +1,18 @@
 import { Request } from 'express';
-import { Db } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
+import * as assert from 'assert';
+
+
+let db = null;
+let client = new MongoClient('mongodb://localhost:27017');
+client.connect(function(err) {
+    assert.equal(null, err);
+
+    db = client.db('close-to-home');
+});
 
 export interface User{
-    id?: number,
+    _id?: number,
     name: string,
     gender: string,
     county: string,
@@ -10,7 +20,6 @@ export interface User{
 }
 
 export interface UserInterest{
-    id?: number,
     name: string,
     type: string,
 }
@@ -19,21 +28,29 @@ export interface UserInterest{
  * UserController Class used to interface with User objects and the User database table
  */
 export class UserController{
-    private _totalUsers: number;
     public page: number;
     public perpage: number;
 
     constructor(
         private req: Request,
-        private db: Db,
     ){
-        this.page = parseInt(req.params.page || 1);
+        this.page = parseInt(req.params.page || 0); //zero indexed
         this.perpage = parseInt(req.params.perpage || 20);
-
     }
 
-    getUsers(){
+    /**
+     * Gets the current required users for the page
+     */
+    getForPage(){
+        return this.getUsers(this.page * this.perpage, this.perpage);
+    }
 
+    getUsers(skip:number=0,limit:number=20){
+
+        return db.collection('users')
+                    .find()
+                    .skip(skip)
+                    .limit(limit);
     }
 
     /**
@@ -41,57 +58,44 @@ export class UserController{
      * @param csv string
      * @return success boolean
      */
-    saveUsersCsv(csv: string){
+    saveUsersCsv(csv: string[]){
         let users = this.csvToUser(csv);
         if(users.length){
-            return this.saveUsers(users);
+            return db.collection('users').insertMany(users).then(x => {
+                return x.result.ok;
+            });
         }
         return false;
     }
 
-    /**
-     * Save a supplied list of Users[] to the db
-     * @param users
-     * @return success boolean
-     */
-    saveUsers(users: User[]){
-
-        return false;
-    }
-
     totalUsers(){
-
-    }
-
-    getForPage(){
-
+        return db.collection('users').totalSize;
     }
 
     /**
      * Function to convert a CSV string to a list of Users
      * TODO: CSV validation for columns and column name
-     * TODO: Add other types of Interests
-     * TODO: validate/auto-correct county
      * @param csvText
      * @return User[]
      */
-    csvToUser(csvText: string){
-        const lines = csvText.split(/\r\n|\n/);
-        const headers = lines[0].split(/\t|,/);
+    csvToUser(csvText: string[]){
+        const lines = csvText;
+        const headers = lines[0];
         let users = [];
 
-        lines.map(line =>{
-            const data = line.split(/\t|,/);
+        lines.splice(0,1);
 
-            if (data.length == headers.length) {
+        // i am assuming csv data integrity to save time
+        lines.map(line =>{
+            if (line.length == headers.length) {
                 let user = <User>{
-                    id: parseInt(data[0]),
-                    name: data[1],
-                    gender: data[2],
-                    county: data[3],
+                    id: parseInt(line[0]),
+                    name: line[1],
+                    gender: line[2],
+                    county: line[3],
                     interests: []
                 };
-                data[4].split(/,/).map(interest => {
+                line[4].split(/,/).map(interest => {
                     user.interests.push({
                         name: interest,
                         type: "Sport"

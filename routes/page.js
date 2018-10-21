@@ -4,7 +4,7 @@
  * @param db MongoDb.client.db
  * @returns router express.Router
  */
-function Page(router, db) {
+function Page(router) {
     /* GET home page. */
     router.get('/', function (req, res, next) {
         res.render('index', { title: 'Close2Home | Homepage' });
