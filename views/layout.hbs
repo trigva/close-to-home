@@ -2,19 +2,38 @@
 <html>
   <head>
     <title>{{title}}</title>
-    <link rel='stylesheet' href='/css/app.css' />
+	  <link rel='stylesheet' href='/css/bootstrap.min.css' />
+	  <link rel='stylesheet' href='/css/app.css' />
+	  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png?v=4"/>
   </head>
   <body>
 
-    {{{body}}}
+    <div class="content-wrap">
+	    <div class="header">
+		    <nav>
+			    <ul>
+				    <li>
+					    <a href="/">Home</a>
+				    </li>
+				    <li>
+					    <a href="/upload">Upload</a>
+				    </li>
+			    </ul>
+		    </nav>
+	    </div>
+
+	    <div class="body">
+		    {{{body}}}
+	    </div>
+    </div>
 
     <!-- Vue Templates -->
+    {{{{raw}}}}
     <script type="text/vue-template" id="template-upload">
-	    <div class="container">
+	    <div class="dropbox-container">
 		    <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-			    <h1>Upload images</h1>
 			    <div class="dropbox">
-				    <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount=$event.target.files.length"
+				    <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files)"
 				           accept="text/csv" class="input-file">
 				    <p v-if="isInitial">
 					    Drag your file(s) here to begin<br> or click to browse
@@ -24,14 +43,53 @@
 				    </p>
 			    </div>
 		    </form>
+		    <div class="isSuccess" v-if="isSuccess">
+			    <p>Files were uploaded successfully.</p>
+			    <button class="btn btn-outline-success" @click="reset()">Add more files</button>
+		    </div>
+		    <div class="isFailed" v-if="isFailed">
+			    <p>There was an error! Failed to upload successfully.</p>
+			    <button class="btn btn-outline-danger" @click="reset()">Try Again</button>
+		    </div>
 	    </div>
 	</script>
 
-    <script type="text/vue-template" id="template-list">
-	    <div class="container">
-
+    <script type="text/vue-template" id="template-user-list">
+	    <div class="user-list">
+		    <div class="header">
+			    Users List
+		    </div>
+		    <div class="content">
+			    <div class="container" v-if="users">
+				    <div class="user-line" v-for="user in users">
+					    <span class="avatar">{{ initial(user.name) }}</span>
+					    <p @click="selectUser(user)">{{user.name}}</p>
+				    </div>
+			    </div>
+			    <div class="flip-container">
+				    flipped
+				    <div class="user" v-if="selectedUser">
+					    <span class="avatar">{{ initial(selectedUser.name) }}</span>
+					    <h3>{{selectedUser.name}}</h3>
+					    <p>{{selectedUser._id}}</p>
+					    <p>{{selectedUser.gender}}</p>
+					    <p>{{selectedUser.county}}</p>
+					    <p>Interests</p>
+					    <div class="interests">
+						    <span class="interest" v-for="interest in selectedUser.interests">{{interest.name}}</span>
+					    </div>
+					    <div class="container" v-if="selectedUser.matches">
+						    <div class="user-line" v-for="user in selectedUser.matches">
+							    <div class="avatar">{{ initial(user.name) }}</div>
+							    <p @click="selectUser(user)">{{user.name}}</p>
+						    </div>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
 	    </div>
     </script>
+    {{{{/raw}}}}
     <!--END: Vue Templates -->
 
     <script type="text/javascript" src="/js/axios.min.js"></script>

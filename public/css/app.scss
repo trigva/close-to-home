@@ -1,19 +1,100 @@
+
+$topGradient: #F8BD61;
+$bottomGradient: #EE45A8;
+
+@mixin bgGradient{
+  background: $bottomGradient; /* Old browsers */
+  background: -moz-linear-gradient(45deg, $bottomGradient 0%, $topGradient 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EE45A8', endColorstr='#F8BD61',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding:0 50px;
+  font: 14px Helvetica, Arial, sans-serif;
+  @include bgGradient;
+  color: #fff;
+}
+
+.content-wrap {
+  min-height: 100vh;
+  max-width: 1024px;
+  margin: auto;
+}
+
+.header {
+  img{
+	width: 50px;
+	transform: rotate(-15deg);
+  }
+  
+  nav{
+	padding: 20px;
+	font-size: 1.2rem;
+	ul{
+	  list-style-type: none;
+	  padding: 0;
+	  margin: 0;
+	}
+	li{
+	  display: inline-block;
+	  padding:0;
+	}
+	a{
+	  color: inherit;
+	  display: inline-block;
+	  padding: 5px 20px;
+	  text-align: center;
+	}
+  }
+}
+
+.body{
+	padding: 40px 20px;
 }
 
 a{ color: #00B7FF; }
 
-.dropbox {
-  outline: 2px dashed grey;
+.dropbox-container {
+  text-align: center;
+  max-width: 30rem;
+  margin: 50px auto;
+  
+  p {
+	font-size: 1.2em;
+	text-align: center;
+  }
+}
+
+
+.dropbox,
+.isFailed,
+.isSuccess{
   outline-offset: -10px;
-  background: lightcyan;
-  color: dimgray;
   padding: 10px 10px;
   min-height: 200px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
   position: relative;
+}
+
+.isFailed {
+  background: #ddb3b9;
+  color: #ff5566;
+}
+.isSuccess {
+  background: #baddb4;
+  color: #54a659;
+}
+
+.dropbox {
+  outline: 2px dashed rgba(lightcyan, 0.3);
   cursor: pointer;
+  transition: all 150ms ease-in;
+  &:hover{ background: lightblue; }
 }
 
 .input-file {
@@ -22,14 +103,4 @@ a{ color: #00B7FF; }
   height: 200px;
   position: absolute;
   cursor: pointer;
-}
-
-.dropbox:hover {
-  background: lightblue;
-}
-
-.dropbox p {
-  font-size: 1.2em;
-  text-align: center;
-  padding: 50px 0;
 }

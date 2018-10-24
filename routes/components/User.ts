@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient, Db, ObjectID } from 'mongodb';
 import * as assert from 'assert';
 
 
@@ -24,33 +24,65 @@ export interface UserInterest{
     type: string,
 }
 
+export interface UserPage{
+    page: number,
+    perpage: number,
+    users: User[],
+    total: number
+}
+
 /**
  * UserController Class used to interface with User objects and the User database table
  */
 export class UserController{
     public page: number;
     public perpage: number;
+    public selectedId: number;
 
     constructor(
         private req: Request,
     ){
         this.page = parseInt(req.params.page || 0); //zero indexed
         this.perpage = parseInt(req.params.perpage || 20);
+        this.selectedId = req.params.id; // used for matches
     }
 
     /**
      * Gets the current required users for the page
      */
-    getForPage(){
-        return this.getUsers(this.page * this.perpage, this.perpage);
+    async getForPage(){
+        let users = await Promise.resolve(
+            db.collection('users')
+                .find({})
+                .skip(this.page * this.perpage)
+                .limit(this.perpage)
+                .toArray()
+        );
+        let stats = await Promise.resolve(
+            db.collection('users')
+                .stats()
+        );
+        return <UserPage>{ users: users, page: this.page, perpage: this.perpage, total: stats.count };
     }
-
-    getUsers(skip:number=0,limit:number=20){
-
-        return db.collection('users')
-                    .find()
-                    .skip(skip)
-                    .limit(limit);
+    
+    async getUser(){
+        return await Promise.resolve(
+            db.collection('users')
+                .findOne({_id: ObjectID(this.selectedId)})
+        );
+    }
+    
+    async getMatches(user: User){
+        const userInterests = user.interests.map(interest => interest.name);
+        return await Promise.resolve(
+            db.collection('users')
+                .find({
+                    "_id": { $ne: ObjectID(user._id) },
+                    "county": user.county,
+                    "interests.name": {$in: userInterests }
+                })
+                .toArray()
+        );
     }
 
     /**
@@ -66,10 +98,6 @@ export class UserController{
             });
         }
         return false;
-    }
-
-    totalUsers(){
-        return db.collection('users').totalSize;
     }
 
     /**
@@ -89,13 +117,12 @@ export class UserController{
         lines.map(line =>{
             if (line.length == headers.length) {
                 let user = <User>{
-                    id: parseInt(line[0]),
-                    name: line[1],
-                    gender: line[2],
-                    county: line[3],
+                    name: line[0],
+                    gender: line[1],
+                    county: line[2],
                     interests: []
                 };
-                line[4].split(/,/).map(interest => {
+                line[3].split(/,/).map(interest => {
                     user.interests.push({
                         name: interest,
                         type: "Sport"

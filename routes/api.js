@@ -14,12 +14,39 @@ function Api(router) {
     var upload = multer({ dest: '/tmp/' });
     /* GET users listing. */
     router.get('/users', function (req, res) {
+        (new User_1.UserController(req)).getForPage() // async
+            .then(function (data) {
+            res.jsonp(data);
+        });
+    });
+    /* GET user matches */
+    router.get('/users/:id/matches', function (req, res) {
         var userC = new User_1.UserController(req);
-        res.jsonp(userC.getForPage());
+        var matchedUser;
+        try {
+            userC.getUser() // async
+                .then(function (user) {
+                matchedUser = user;
+                console.log(user);
+                return userC.getMatches(user);
+            })
+                .then(function (matches) {
+                var interests = matchedUser.interests.map(function (i) { return i.name; });
+                matches = matches.filter(function (match) {
+                    return match.interests.filter(function (i) {
+                        return interests.indexOf(i.name) !== -1;
+                    }).length > 1;
+                });
+                // TODO: filter data to only/ return at least 2 interest matches
+                res.jsonp({ success: true, matches: matches });
+            });
+        }
+        catch (e) {
+            res.jsonp({ success: false });
+        }
     });
     /* POST upload users */
     router.post('/users', upload.single('csv'), function (req, res) {
-        var userC = new User_1.UserController(req);
         var fileRows = [];
         // open uploaded file
         csv.fromPath(req.file.path)
@@ -28,8 +55,12 @@ function Api(router) {
         })
             .on("end", function () {
             fs.unlinkSync(req.file.path); // remove temp file
-            userC.saveUsersCsv(fileRows);
-            res.jsonp({ success: true, message: "Uploaded Successfully" });
+            if ((new User_1.UserController(req)).saveUsersCsv(fileRows)) {
+                res.jsonp({ success: true, message: "Uploaded Successfully" });
+            }
+            else {
+                res.jsonp({ success: false, message: "Upload Failed" });
+            }
         });
     });
     return router;
