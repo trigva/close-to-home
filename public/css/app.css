@@ -1,13 +1,5 @@
-@keyframes rotate {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg); }
-  50% {
-    transform: translate(-50%, -50%) rotate(180deg); }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg); } }
-
 body {
-  padding: 0 50px;
+  padding: 0;
   font: 14px Helvetica, Arial, sans-serif;
   color: #75530e;
   background: #EE45A8;
@@ -22,31 +14,34 @@ body {
   /* IE6-9 fallback on horizontal gradient */ }
 
 .content-wrap {
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
   max-width: 1024px;
   margin: auto;
   position: relative;
   z-index: 2; }
 
-.header img {
-  width: 50px;
-  transform: rotate(-15deg); }
-
-.header nav {
-  padding: 20px;
-  font-size: 1.2rem; }
-  .header nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0; }
-  .header nav li {
-    display: inline-block;
-    padding: 0; }
-  .header nav a {
-    color: inherit;
-    display: inline-block;
-    padding: 5px 20px;
-    text-align: center; }
+.header {
+  background: #fff; }
+  .header img {
+    width: 50px;
+    transform: rotate(-15deg); }
+  .header nav {
+    padding: 20px;
+    font-size: 1.2rem;
+    max-width: 1024px;
+    margin: auto; }
+    .header nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0; }
+    .header nav li {
+      display: inline-block;
+      padding: 0; }
+    .header nav a {
+      color: inherit;
+      display: inline-block;
+      padding: 5px 20px;
+      text-align: center; }
 
 .body {
   padding: 40px 20px; }
@@ -116,14 +111,14 @@ a {
       right: 0;
       bottom: 0;
       transform: perspective(450px) rotatey(180deg); }
-    .flip-wrap .flip-container .header {
+    .flip-wrap .flip-container .heading {
       display: flex;
       align-items: center;
       padding: 5px 10px;
       background: rgba(255, 255, 255, 0.3);
       position: relative;
       z-index: 1; }
-      .flip-wrap .flip-container .header h3, .flip-wrap .flip-container .header p {
+      .flip-wrap .flip-container .heading h3, .flip-wrap .flip-container .heading p {
         margin: 0; }
     .flip-wrap .flip-container span.reset {
       display: inline-block;

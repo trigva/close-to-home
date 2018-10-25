@@ -8,20 +8,13 @@
   </head>
   <body>
 
+    <div class="header">
+	    <nav><ul>
+		    <li><a href="/">Home</a></li>
+		    <li><a href="/upload">Upload</a></li>
+	    </ul></nav>
+    </div>
     <div class="content-wrap">
-	    <div class="header">
-		    <nav>
-			    <ul>
-				    <li>
-					    <a href="/">Home</a>
-				    </li>
-				    <li>
-					    <a href="/upload">Upload</a>
-				    </li>
-			    </ul>
-		    </nav>
-	    </div>
-
 	    <div class="body">
 		    {{{body}}}
 	    </div>
@@ -56,7 +49,7 @@
 
     <script type="text/vue-template" id="template-user-list">
 	    <div class="user-list">
-		    <div class="header">
+		    <div class="heading">
 			    <h3>Users of Close2Home</h3>
 			    <p>Select one to expand their info &hellip;</p>
 		    </div>
@@ -70,7 +63,7 @@
 				    </div>
 			    </div>
 			    <div class="flip-container back">
-				    <div class="header" v-if="selectedUser">
+				    <div class="heading" v-if="selectedUser">
 					    <span class="avatar">{{ initial(selectedUser.name) }}</span>
 					    <h3>{{selectedUser.name}}</h3>
 					    <span class="reset" @click="reset()"></span>

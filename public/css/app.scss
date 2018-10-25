@@ -8,7 +8,7 @@ body {
 }
 
 .content-wrap {
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
   max-width: 1024px;
   margin: auto;
   position: relative;
@@ -16,6 +16,7 @@ body {
 }
 
 .header {
+  background: #fff;
   img{
 	width: 50px;
 	transform: rotate(-15deg);
@@ -24,6 +25,8 @@ body {
   nav{
 	padding: 20px;
 	font-size: 1.2rem;
+	max-width: 1024px;
+	margin: auto;
 	ul{
 	  list-style-type: none;
 	  padding: 0;
