@@ -1,0 +1,14 @@
+$topGradient: #F8BD61;
+$bottomGradient: #EE45A8;
+$boxColor: rgba(255,255,255,0.3);
+$boxTextColor: #333;
+$textColor: #75530e;
+$alert:#ff6960;
+
+@mixin bgGradient{
+  background: $bottomGradient; /* Old browsers */
+  background: -moz-linear-gradient(45deg, $bottomGradient 0%, $topGradient 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EE45A8', endColorstr='#F8BD61',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}

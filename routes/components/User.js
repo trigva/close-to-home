@@ -50,7 +50,7 @@ var UserController = /** @class */ (function () {
     function UserController(req) {
         this.req = req;
         this.page = parseInt(req.params.page || 0); //zero indexed
-        this.perpage = parseInt(req.params.perpage || 20);
+        this.perpage = parseInt(req.params.perpage || 200);
         this.selectedId = req.params.id; // used for matches
     }
     /**

@@ -73,10 +73,11 @@
 				page: 0,
 				perpage: 20,
 				total: 1,
-				selectedUser: null
+				selectedUser: void 0
 			}
 		},
 		computed: {
+			flipped() { return typeof this.selectedUser !== 'undefined' }
 		},
 		async created() {
 			const getUsersForPage = await http.get('/api/users', {
@@ -95,10 +96,15 @@
 				return name.charAt(0);
 			},
 			selectUser(user){
-				this.selectedUser = user;
-				if(!this.selectedUser.matches){
-					this.getMatches();
-				}
+				let timer = this.selectedUser ? 300 : 0; //quarter the animation time
+				this.reset();
+				let vueI = this;
+				setTimeout(function(){
+					vueI.selectedUser = user;
+					if(!vueI.selectedUser.matches){
+						vueI.getMatches();
+					}
+				},timer);
 			},
 			async getMatches(){
 				let matches = await http.get('/api/users/' + this.selectedUser._id + '/matches');
@@ -106,6 +112,9 @@
 			},
 			updateMatches(data){
 				this.selectedUser = Object.assign({},this.selectedUser,{ 'matches': data.matches });
+			},
+			reset(){
+				this.selectedUser = void 0;
 			}
 		},
 		mounted() {

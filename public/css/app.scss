@@ -1,26 +1,18 @@
-
-$topGradient: #F8BD61;
-$bottomGradient: #EE45A8;
-
-@mixin bgGradient{
-  background: $bottomGradient; /* Old browsers */
-  background: -moz-linear-gradient(45deg, $bottomGradient 0%, $topGradient 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(45deg, $bottomGradient 0%,$topGradient 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EE45A8', endColorstr='#F8BD61',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-}
+@import "settings";
 
 body {
-  padding:0 50px;
+  padding:0;
   font: 14px Helvetica, Arial, sans-serif;
+  color: $textColor;
   @include bgGradient;
-  color: #fff;
 }
 
 .content-wrap {
   min-height: 100vh;
   max-width: 1024px;
   margin: auto;
+  position: relative;
+  z-index:2;
 }
 
 .header {
@@ -56,51 +48,5 @@ body {
 
 a{ color: #00B7FF; }
 
-.dropbox-container {
-  text-align: center;
-  max-width: 30rem;
-  margin: 50px auto;
-  
-  p {
-	font-size: 1.2em;
-	text-align: center;
-  }
-}
-
-
-.dropbox,
-.isFailed,
-.isSuccess{
-  outline-offset: -10px;
-  padding: 10px 10px;
-  min-height: 200px;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.isFailed {
-  background: #ddb3b9;
-  color: #ff5566;
-}
-.isSuccess {
-  background: #baddb4;
-  color: #54a659;
-}
-
-.dropbox {
-  outline: 2px dashed rgba(lightcyan, 0.3);
-  cursor: pointer;
-  transition: all 150ms ease-in;
-  &:hover{ background: lightblue; }
-}
-
-.input-file {
-  opacity: 0;
-  width: 100%;
-  height: 200px;
-  position: absolute;
-  cursor: pointer;
-}
+@import 'dropbox';
+@import 'user-list';

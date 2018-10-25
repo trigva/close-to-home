@@ -30,7 +30,6 @@ function Api(router: Router){
             userC.getUser() // async
                 .then(user => {
                     matchedUser = user;
-                    console.log(user);
                     return userC.getMatches(user);
                 })
                 .then(matches => {

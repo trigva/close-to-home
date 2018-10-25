@@ -1,6 +1,15 @@
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg); }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg); }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg); } }
+
 body {
   padding: 0 50px;
   font: 14px Helvetica, Arial, sans-serif;
+  color: #75530e;
   background: #EE45A8;
   /* Old browsers */
   background: -moz-linear-gradient(45deg, #EE45A8 0%, #F8BD61 100%);
@@ -10,13 +19,14 @@ body {
   background: linear-gradient(45deg, #EE45A8 0%, #F8BD61 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EE45A8', endColorstr='#F8BD61',GradientType=1 );
-  /* IE6-9 fallback on horizontal gradient */
-  color: #fff; }
+  /* IE6-9 fallback on horizontal gradient */ }
 
 .content-wrap {
   min-height: 100vh;
   max-width: 1024px;
-  margin: auto; }
+  margin: auto;
+  position: relative;
+  z-index: 2; }
 
 .header img {
   width: 50px;
@@ -85,3 +95,130 @@ a {
   height: 200px;
   position: absolute;
   cursor: pointer; }
+
+.flip-wrap {
+  margin-top: 30px;
+  position: relative;
+  z-index: 2; }
+  .flip-wrap .flip-container {
+    transform-style: preserve-3d;
+    transition: 1000ms;
+    position: relative;
+    transform: perspective(450px) rotatey(0);
+    backface-visibility: hidden;
+    background: rgba(255, 255, 255, 0.3);
+    color: #333;
+    box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.3); }
+    .flip-wrap .flip-container.back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: perspective(450px) rotatey(180deg); }
+    .flip-wrap .flip-container .header {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1; }
+      .flip-wrap .flip-container .header h3, .flip-wrap .flip-container .header p {
+        margin: 0; }
+    .flip-wrap .flip-container span.reset {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin-left: auto;
+      position: relative;
+      cursor: pointer; }
+      .flip-wrap .flip-container span.reset:before, .flip-wrap .flip-container span.reset:after {
+        content: "";
+        width: 20px;
+        height: 3px;
+        background: #333;
+        transform: rotate(45deg);
+        display: inline-block;
+        position: absolute;
+        top: 13px;
+        left: 4px;
+        transition: all 150ms ease-in; }
+      .flip-wrap .flip-container span.reset:after {
+        transform: rotate(-45deg); }
+      .flip-wrap .flip-container span.reset:hover:before, .flip-wrap .flip-container span.reset:hover:after {
+        background: #ff6960; }
+  .flip-wrap.flipped .flip-container {
+    transform: perspective(450px) rotatey(180deg); }
+    .flip-wrap.flipped .flip-container.back {
+      transform: perspective(450px) rotatey(360deg); }
+
+.user-list {
+  max-width: 500px;
+  margin: auto; }
+  .user-list .users-container {
+    height: 600px;
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: visible; }
+    .user-list .users-container > .user-line {
+      display: flex;
+      align-items: center;
+      justify-content: stretch;
+      cursor: pointer;
+      padding: 5px 15px;
+      border-radius: 5px;
+      transition: all 150ms ease-in; }
+      .user-list .users-container > .user-line:hover {
+        background: rgba(248, 189, 97, 0.5); }
+
+.user .users-container {
+  max-height: 322px; }
+
+.avatar {
+  display: inline-flex;
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  align-items: center;
+  justify-content: center;
+  background: #F8BD61;
+  color: #EE45A8;
+  font-family: Arial, sans-serif; }
+
+.list {
+  margin: 20px 5px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: stretch; }
+  .list .list-row {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    justify-content: stretch; }
+    .list .list-row .key {
+      display: inline-block;
+      width: 100px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+      .list .list-row .key.interests {
+        padding: 15px 10px; }
+    .list .list-row .value {
+      display: inline-block;
+      padding: 10px; }
+
+.matches-header {
+  padding-left: 5px; }
+
+.interest {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 5px; }

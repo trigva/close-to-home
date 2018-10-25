@@ -57,31 +57,46 @@
     <script type="text/vue-template" id="template-user-list">
 	    <div class="user-list">
 		    <div class="header">
-			    Users List
+			    <h3>Users of Close2Home</h3>
+			    <p>Select one to expand their info &hellip;</p>
 		    </div>
-		    <div class="content">
-			    <div class="container" v-if="users">
-				    <div class="user-line" v-for="user in users">
-					    <span class="avatar">{{ initial(user.name) }}</span>
-					    <p @click="selectUser(user)">{{user.name}}</p>
+		    <div class="flip-wrap" v-bind:class="{ flipped: flipped }">
+			    <div class="flip-container">
+				    <div class="users-container" v-if="users">
+					    <div class="user-line" v-for="user in users" @click="selectUser(user)">
+						    <span class="avatar">{{ initial(user.name) }}</span>
+						    <span>{{user.name}}</span>
+					    </div>
 				    </div>
 			    </div>
-			    <div class="flip-container">
-				    flipped
-				    <div class="user" v-if="selectedUser">
+			    <div class="flip-container back">
+				    <div class="header" v-if="selectedUser">
 					    <span class="avatar">{{ initial(selectedUser.name) }}</span>
 					    <h3>{{selectedUser.name}}</h3>
-					    <p>{{selectedUser._id}}</p>
-					    <p>{{selectedUser.gender}}</p>
-					    <p>{{selectedUser.county}}</p>
-					    <p>Interests</p>
-					    <div class="interests">
-						    <span class="interest" v-for="interest in selectedUser.interests">{{interest.name}}</span>
+					    <span class="reset" @click="reset()"></span>
+				    </div>
+				    <div class="user" v-if="selectedUser">
+					    <div class="list">
+						    <div class="list-row">
+							    <span class="key">Gender</span>
+							    <span class="value">{{selectedUser.gender}}</span>
+						    </div>
+						    <div class="list-row">
+							    <span class="key">County</span>
+							    <span class="value">{{selectedUser.county}}</span>
+						    </div>
+						    <div class="list-row">
+							    <span class="key interests">Interests</span>
+							    <span class="value">
+								    <span class="interest" v-for="interest in selectedUser.interests">{{interest.name}}</span>
+							    </span>
+						    </div>
 					    </div>
-					    <div class="container" v-if="selectedUser.matches">
-						    <div class="user-line" v-for="user in selectedUser.matches">
-							    <div class="avatar">{{ initial(user.name) }}</div>
-							    <p @click="selectUser(user)">{{user.name}}</p>
+					    <h4 class="matches-header">User Matches</h4>
+					    <div class="users-container" v-if="selectedUser.matches">
+						    <div class="user-line" v-for="user in selectedUser.matches" @click="selectUser(user)">
+							    <span class="avatar">{{ initial(user.name) }}</span>
+							    <span>{{user.name}}</span>
 						    </div>
 					    </div>
 				    </div>
